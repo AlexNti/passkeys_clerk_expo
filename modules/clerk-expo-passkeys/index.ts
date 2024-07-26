@@ -37,15 +37,17 @@ export function addChangeListener(
   return emitter.addListener<ChangeEventPayload>("onChange", listener);
 }
 
-// export function create(credentials: PublicKeyCredentialCreationOptionsJSON) {
-//   if (Platform.OS === "android") {
-//     return AndroidPasskeys.create(credentials);
-//   } else if (Platform.OS === "ios") {
-//     throw new Error("Not supoorted");
-//   } else {
-//     throw new Error("Not supoorted");
-//   }
-// }
+export async function create(
+  credentials: PublicKeyCredentialCreationOptionsJSON
+) {
+  if (Platform.OS === "android") {
+    return AndroidPasskeys.create(credentials);
+  } else if (Platform.OS === "ios") {
+    throw new Error("Not supoorted");
+  } else {
+    throw new Error("Not supoorted");
+  }
+}
 
 export {
   ClerkExpoPasskeysView,

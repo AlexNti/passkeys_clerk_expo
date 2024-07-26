@@ -3,25 +3,22 @@ import "react-native-get-random-values";
 import { db } from "./db";
 import { decodeBase64Url, encodeBase64Url } from "./encode";
 import { verifyAssertion } from "./passkey";
-import { hello } from "@/modules/clerk-expo-passkeys";
+import { hello, create } from "@/modules/clerk-expo-passkeys";
 type User = {
   userId: string;
   username: string;
 };
 
 export async function signUp(username: string): Promise<User> {
-  console.log(hello());
-
   // should be handled in server - start
   const userExists = !!db.getByUsername(username);
   if (userExists) throw new Error("Username already used");
   // recommend minimum 16 bytes
   const challenge = crypto.getRandomValues(new Uint8Array(32)).toString();
-  console.log(challenge);
   // should be handled in server - end
 
   try {
-    const publicKeyCredential = console.log({
+    const publicKeyCredential = await create({
       // publicKey = Web Authentication API
 
       rp: { name: "Passkey Demo", id: "localhost:3000" },

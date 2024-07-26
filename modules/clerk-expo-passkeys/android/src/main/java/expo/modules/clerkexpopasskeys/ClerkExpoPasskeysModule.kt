@@ -34,53 +34,44 @@ import kotlinx.coroutines.launch
 
 class ClerkExpoPasskeysModule : Module() {
   private val mainScope = CoroutineScope(Dispatchers.Default)
-
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+  
   override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ClerkExpoPasskeys')` in JavaScript.
-    Name("ClerkExpoPasskeys")
-
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
-
-    
+      Name("ClerkExpoPasskeys")
 
       Function("isSupported") {
-            val minApiLevelPasskeys = 28
-            val currentApiLevel = android.os.Build.VERSION.SDK_INT
-            return@Function currentApiLevel >= minApiLevelPasskeys
+          val minApiLevelPasskeys = 28
+          val currentApiLevel = android.os.Build.VERSION.SDK_INT
+          return@Function currentApiLevel >= minApiLevelPasskeys
       }
 
-    
+      Function("isAutoFillAvailable") {
+          false
+      }
+
+      
 
       AsyncFunction("create") { request: PublicKeyCredentialCreationOptions, promise: Promise ->
-        val credentialManager =
-            CredentialManager.create(appContext.reactContext?.applicationContext!!)
-        val json = Gson().toJson(request)
-        val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(json)
+          val credentialManager =
+              CredentialManager.create(appContext.reactContext?.applicationContext!!)
+          val json = Gson().toJson(request)
+          val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(json)
 
 
-        // mainScope.launch {
-        //     try {
-        //         val result = appContext.currentActivity?.let {
-        //             credentialManager.createCredential(it, createPublicKeyCredentialRequest)
-        //         }
-        //         val response =
-        //             result?.data?.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON")
-        //         val createCredentialResponse =
-        //             Gson().fromJson(response, RegistrationResponseJSON::class.java)
-        //         promise.resolve(createCredentialResponse)
-        //     } catch (e: CreateCredentialException) {
-        //         promise.reject("Passkey Create", getRegistrationException(e), e)
-        //     }
-        // }
-    }
+          mainScope.launch {
+              try {
+                  val result = appContext.activityProvider?.currentActivity?.let {
+                      credentialManager.createCredential(it, createPublicKeyCredentialRequest)
+                  }
+                  val response =
+                      result?.data?.getString("androidx.credentials.BUNDLE_KEY_REGISTRATION_RESPONSE_JSON")
+                  val createCredentialResponse =
+                      Gson().fromJson(response, RegistrationResponseJSON::class.java)
+                  promise.resolve(createCredentialResponse)
+              } catch (e: CreateCredentialException) {
+                  promise.reject("Passkey Create", "Cannot create", e)
+              }
+          }
+      }
 
     // Defines event names that the module can send to JavaScript.
     Events("onChange")
