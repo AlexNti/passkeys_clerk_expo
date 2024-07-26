@@ -10,7 +10,7 @@ type User = {
 };
 
 export async function signUp(username: string): Promise<User> {
-  hello();
+  console.log(hello());
 
   // should be handled in server - start
   const userExists = !!db.getByUsername(username);
