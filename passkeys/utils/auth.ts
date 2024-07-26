@@ -35,7 +35,7 @@ export async function signUp(username: string): Promise<User> {
           alg: -7,
         },
       ],
-      challenge,
+      challenge: "T1xCsnxM2DNL2KdK5CLa6fMhD7OBqho6syzInk_n-Uo",
       authenticatorSelection: {
         userVerification: "required",
       },

@@ -6,9 +6,12 @@ export class AndroidPasskeys {
     credentials: PublicKeyCredentialCreationOptionsJSON
   ) {
     try {
-      const response = await ClerkExpoPasskeys.create(credentials);
+      const response = await ClerkExpoPasskeys.create(
+        JSON.stringify(credentials)
+      );
       return response;
     } catch (error: unknown) {
+      console.log(error);
       throw error;
     }
   }

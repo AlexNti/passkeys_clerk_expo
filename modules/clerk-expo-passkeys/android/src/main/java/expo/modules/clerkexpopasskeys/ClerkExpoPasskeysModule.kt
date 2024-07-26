@@ -50,11 +50,10 @@ class ClerkExpoPasskeysModule : Module() {
 
       
 
-      AsyncFunction("create") { request: PublicKeyCredentialCreationOptions, promise: Promise ->
+      AsyncFunction("create") { request: String, promise: Promise ->
           val credentialManager =
               CredentialManager.create(appContext.reactContext?.applicationContext!!)
-          val json = Gson().toJson(request)
-          val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(json)
+          val createPublicKeyCredentialRequest = CreatePublicKeyCredentialRequest(request)
 
 
           mainScope.launch {
@@ -68,7 +67,7 @@ class ClerkExpoPasskeysModule : Module() {
                       Gson().fromJson(response, RegistrationResponseJSON::class.java)
                   promise.resolve(createCredentialResponse)
               } catch (e: CreateCredentialException) {
-                  promise.reject("Passkey Create", "Cannot create", e)
+                  promise.reject("Passkey Create", e.message, e)
               }
           }
       }
