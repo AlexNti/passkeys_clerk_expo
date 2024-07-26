@@ -29,8 +29,8 @@
           "autoVerify": true,
           "data": [
             {
-              "scheme": "http",
-              "host": "localhost:3000",
+              "scheme": "https",
+              "host": "menu.ble-papagalos.gr",
               "pathPrefix": "/records"
             }
           ],

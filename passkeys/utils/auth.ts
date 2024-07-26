@@ -21,7 +21,7 @@ export async function signUp(username: string): Promise<User> {
     const publicKeyCredential = await create({
       // publicKey = Web Authentication API
 
-      rp: { name: "Passkey Demo", id: "localhost:3000" },
+      rp: { name: "Passkey Demo", id: "menu.ble-papagalos.gr" },
       user: {
         id: crypto.getRandomValues(new Uint8Array(32)).toString(),
         name: username,
@@ -30,13 +30,24 @@ export async function signUp(username: string): Promise<User> {
       pubKeyCredParams: [
         {
           type: "public-key",
-          // use ECDSA with the secp256k1 curve and the SHA-256 (aka. ES256K)
-          // based on IANA COSE Algorithms registry id
           alg: -7,
         },
+        {
+          type: "public-key",
+          alg: -257,
+        },
+      ],
+      timeout: 1800000,
+      attestation: "none",
+      excludeCredentials: [
+        { id: "ghi789", type: "public-key" },
+        { id: "jkl012", type: "public-key" },
       ],
       challenge: "T1xCsnxM2DNL2KdK5CLa6fMhD7OBqho6syzInk_n-Uo",
       authenticatorSelection: {
+        authenticatorAttachment: "platform",
+        requireResidentKey: true,
+        residentKey: "required",
         userVerification: "required",
       },
     });
