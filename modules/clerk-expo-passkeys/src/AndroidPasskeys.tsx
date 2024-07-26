@@ -6,6 +6,7 @@ export class AndroidPasskeys {
     credentials: PublicKeyCredentialCreationOptionsJSON
   ) {
     try {
+      console.log(credentials.user.id);
       const response = await ClerkExpoPasskeys.create(
         JSON.stringify(credentials)
       );
