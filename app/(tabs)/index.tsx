@@ -4,7 +4,7 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { signIn } from "@/passkeys/utils/auth";
+import { signIn, signUp } from "@/passkeys/utils/auth";
 
 export default function HomeScreen() {
   return (
@@ -22,7 +22,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <Pressable onPress={signIn}>
+        <Pressable onPress={() => signUp("alex")}>
           <Text>Create</Text>
         </Pressable>
         <ThemedText>
