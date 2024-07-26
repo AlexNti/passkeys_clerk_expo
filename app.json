@@ -20,7 +20,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "compileSdkVersion": 34
+        "compileSdkVersion": 35
       },
       "package": "com.alexis_ni.PasskeysTest",
       "intentFilters": [

@@ -1,10 +1,20 @@
-import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
+import {
+  NativeModulesProxy,
+  EventEmitter,
+  Subscription,
+} from "expo-modules-core";
 
 // Import the native module. On web, it will be resolved to ClerkExpoPasskeys.web.ts
 // and on native platforms to ClerkExpoPasskeys.ts
-import ClerkExpoPasskeysModule from './src/ClerkExpoPasskeysModule';
-import ClerkExpoPasskeysView from './src/ClerkExpoPasskeysView';
-import { ChangeEventPayload, ClerkExpoPasskeysViewProps } from './src/ClerkExpoPasskeys.types';
+import ClerkExpoPasskeysModule from "./src/ClerkExpoPasskeysModule";
+import ClerkExpoPasskeysView from "./src/ClerkExpoPasskeysView";
+import {
+  ChangeEventPayload,
+  ClerkExpoPasskeysViewProps,
+  PublicKeyCredentialCreationOptionsJSON,
+} from "./src/ClerkExpoPasskeys.types";
+import { Platform } from "react-native";
+import { AndroidPasskeys } from "./src/AndroidPasskeys";
 
 // Get the native constant value.
 export const PI = ClerkExpoPasskeysModule.PI;
@@ -17,10 +27,28 @@ export async function setValueAsync(value: string) {
   return await ClerkExpoPasskeysModule.setValueAsync(value);
 }
 
-const emitter = new EventEmitter(ClerkExpoPasskeysModule ?? NativeModulesProxy.ClerkExpoPasskeys);
+const emitter = new EventEmitter(
+  ClerkExpoPasskeysModule ?? NativeModulesProxy.ClerkExpoPasskeys
+);
 
-export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
+export function addChangeListener(
+  listener: (event: ChangeEventPayload) => void
+): Subscription {
+  return emitter.addListener<ChangeEventPayload>("onChange", listener);
 }
 
-export { ClerkExpoPasskeysView, ClerkExpoPasskeysViewProps, ChangeEventPayload };
+// export function create(credentials: PublicKeyCredentialCreationOptionsJSON) {
+//   if (Platform.OS === "android") {
+//     return AndroidPasskeys.create(credentials);
+//   } else if (Platform.OS === "ios") {
+//     throw new Error("Not supoorted");
+//   } else {
+//     throw new Error("Not supoorted");
+//   }
+// }
+
+export {
+  ClerkExpoPasskeysView,
+  ClerkExpoPasskeysViewProps,
+  ChangeEventPayload,
+};
