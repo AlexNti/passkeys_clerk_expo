@@ -40,6 +40,7 @@ export async function signUp(username: string): Promise<User> {
         userVerification: "required",
       },
     });
+    console.log(publicKeyCredential);
     if (!(publicKeyCredential instanceof PublicKeyCredential)) {
       throw new TypeError();
     }

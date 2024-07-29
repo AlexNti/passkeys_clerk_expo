@@ -36,8 +36,6 @@ export async function verifyAssertion(
     throw new Error("Malformed 'authData'");
   }
 
-  console.log(response.authenticatorData);
-
   const rpIdHash = authData.slice(0, 32);
   const rpIdData = new TextEncoder().encode(window.location.hostname);
   const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
