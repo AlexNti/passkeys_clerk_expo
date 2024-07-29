@@ -23,7 +23,7 @@ export async function signUp(username: string): Promise<User> {
 
       rp: { name: "Passkey Demo", id: "com.alexis_ni.PasskeysTest" },
       user: {
-        id: crypto.getRandomValues(new Uint8Array(32)).toString(),
+        id: "def456",
         name: username + "123",
         displayName: username,
       },
@@ -35,7 +35,7 @@ export async function signUp(username: string): Promise<User> {
           alg: -7,
         },
       ],
-      challenge,
+      challenge: "abc123",
       authenticatorSelection: {
         userVerification: "required",
       },
