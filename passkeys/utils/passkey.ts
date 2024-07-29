@@ -63,8 +63,6 @@ export async function verifyAssertion(
     throw new Error("Failed to verify user present flag");
   }
 
-  debugger;
-
   // the signature is encoded in DER
   // so we need to convert into ECDSA compatible format
   // const signature = convertDERSignatureToECDSASignature(response.signature);

@@ -34,6 +34,7 @@ export default function HomeScreen() {
   const handleSignIn = async () => {
     try {
       const user = await signIn();
+      console.log({ user });
       setLoggedInUser(user);
     } catch (e) {
       console.log(e);

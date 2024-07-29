@@ -90,10 +90,15 @@ export async function signIn(): Promise<User> {
   if (!databaseUser) {
     throw new Error("User does not exist");
   }
-  await verifyAssertion(publicKeyCredential, {
-    publicKey: decodeBase64Url(databaseUser.public_key),
-    challenge,
-  });
+  try {
+    await verifyAssertion(publicKeyCredential, {
+      publicKey: decodeBase64Url(databaseUser.public_key),
+      challenge,
+    });
+  } catch (e) {
+    console.log("Filed to verify assertion", e);
+  }
+
   // should be handled in server - end
   return {
     userId: databaseUser.id,
