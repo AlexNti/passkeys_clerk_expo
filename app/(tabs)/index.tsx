@@ -1,80 +1,102 @@
-import { Image, StyleSheet, Platform, Pressable, Text } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Pressable,
+  Text,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { signIn, signUp } from "@/passkeys/utils/auth";
+import { signIn, signUp, User } from "@/passkeys/utils/auth";
+import React from "react";
 
 export default function HomeScreen() {
+  const [loggedInUser, setLoggedInUser] = React.useState<User>();
+  const [userName, setUsername] = React.useState("");
+
+  const handleSignUp = async () => {
+    if (!userName) {
+      return;
+    }
+    try {
+      const user = await signUp(userName);
+      setLoggedInUser(user);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleSignIn = async () => {
+    try {
+      const user = await signIn();
+      setLoggedInUser(user);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require("@/assets/images/partial-react-logo.png")}
+          source={require("@/assets/images/playstore.png")}
           style={styles.reactLogo}
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <Pressable onPress={() => signUp("alex")}>
-          <Text>Sign-up</Text>
+        <Pressable style={{ borderBlockColor: "1" }} onPress={handleSignUp}>
+          <Text style={{ color: "cyan" }}>Sign-up</Text>
         </Pressable>
-        <Pressable onPress={() => signIn()}>
-          <Text>Sign-in</Text>
+
+        <Pressable onPress={handleSignIn}>
+          <Text style={{ color: "cyan" }}>Sign-in</Text>
         </Pressable>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+
+        <TextInput
+          onChangeText={setUsername}
+          style={{ color: "cyan" }}
+          placeholder="Please Enter Username of the user"
+        />
+
+        {loggedInUser && (
+          <ThemedView style={{ flex: 1, flexDirection: "column" }}>
+            <Text style={{ color: "cyan" }}>
+              You are logged in with the user with ID {loggedInUser.userId}
+            </Text>
+            <Text style={{ color: "cyan" }}>
+              Username: {loggedInUser.username}
+            </Text>
+          </ThemedView>
+        )}
       </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
   stepContainer: {
-    gap: 8,
+    gap: 10,
     marginBottom: 8,
+    backgroundColor: "#1D3D47",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flex: 1,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
+    height: 250,
+    width: 200,
     bottom: 0,
-    left: 0,
+    left: 80,
+    right: 0,
+    top: 0,
     position: "absolute",
   },
 });

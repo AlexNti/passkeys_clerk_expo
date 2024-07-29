@@ -5,7 +5,7 @@ import { decodeBase64Url } from "./encode";
 import { verifyAssertion } from "./passkey";
 import { hello, create, get } from "@/modules/clerk-expo-passkeys";
 import { hexToBase64Url } from "./challenge";
-type User = {
+export type User = {
   userId: string;
   username: string;
 };
@@ -27,9 +27,9 @@ export async function signUp(
 
       rp: { name: "Passkey Demo", id: "menu.ble-papagalos.gr" },
       user: {
-        id: "def4567dasd",
-        name: "a.ntitoras@gmail.com",
-        displayName: username + "a.ntitoras@gmail.com",
+        id: username + generateId(5),
+        name: username,
+        displayName: username,
       },
       pubKeyCredParams: [
         {
