@@ -1,7 +1,7 @@
 import "react-native-get-random-values";
 
 import { db } from "./db";
-import { decodeBase64Url, encodeBase64Url } from "./encode";
+import { decodeBase64Url } from "./encode";
 import { verifyAssertion } from "./passkey";
 import { hello, create, get } from "@/modules/clerk-expo-passkeys";
 import { hexToBase64Url } from "./challenge";
@@ -10,7 +10,10 @@ type User = {
   username: string;
 };
 
-export async function signUp(username: string): Promise<User> {
+export async function signUp(
+  _username: string
+): Promise<{ username: string; userId: string } | undefined> {
+  const username = _username;
   // should be handled in server - start
   const userExists = !!db.getByUsername(username);
   if (userExists) throw new Error("Username already used");
@@ -24,9 +27,9 @@ export async function signUp(username: string): Promise<User> {
 
       rp: { name: "Passkey Demo", id: "menu.ble-papagalos.gr" },
       user: {
-        id: "def456",
-        name: username + "123",
-        displayName: username,
+        id: "def4567dasd",
+        name: "a.ntitoras@gmail.com",
+        displayName: username + "a.ntitoras@gmail.com",
       },
       pubKeyCredParams: [
         {
@@ -38,32 +41,26 @@ export async function signUp(username: string): Promise<User> {
       ],
       challenge,
       authenticatorSelection: {
+        authenticatorAttachment: "platform",
+        requireResidentKey: true,
+        residentKey: "required",
         userVerification: "required",
       },
     });
 
-    if (!(publicKeyCredential instanceof PublicKeyCredential)) {
-      throw new TypeError();
-    }
-    if (
-      !(
-        publicKeyCredential.response instanceof AuthenticatorAttestationResponse
-      )
-    ) {
-      throw new TypeError("Unexpected attestation response");
+    if (!publicKeyCredential?.response.publicKey) {
+      throw new TypeError("Does not contain a public key");
     }
 
     // should be handled in server from here
     const userId = generateId(8);
-    const publicKey = publicKeyCredential.response.getPublicKey();
-    if (!publicKey) {
-      throw new Error("Could not retrieve public key");
-    }
+    const publicKey = publicKeyCredential?.response.publicKey;
+
     db.insert({
       id: userId,
       credential_id: publicKeyCredential.id, // base64url encoded
       username,
-      public_key: encodeBase64Url(publicKey),
+      public_key: publicKey,
     });
 
     return { userId, username };
@@ -81,8 +78,12 @@ export async function signIn(): Promise<User> {
     rpId: "menu.ble-papagalos.gr",
     challenge,
   });
-  if (!(publicKeyCredential instanceof PublicKeyCredential)) {
-    throw new TypeError();
+  if (
+    !publicKeyCredential?.response.clientDataJSON ||
+    !publicKeyCredential?.response.authenticatorData ||
+    !publicKeyCredential?.response.signature
+  ) {
+    throw new TypeError("publicKeyCredential");
   }
   // should be handled in server - start
   const databaseUser = db.getByCredentialId(publicKeyCredential.id);

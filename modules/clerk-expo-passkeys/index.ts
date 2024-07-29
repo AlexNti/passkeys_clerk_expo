@@ -13,9 +13,13 @@ import {
   ClerkExpoPasskeysViewProps,
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
+  RegistrationResponseJSON,
+  AuthenticationResponseJSON,
 } from "./src/ClerkExpoPasskeys.types";
 import { Platform } from "react-native";
 import { AndroidPasskeys } from "./src/AndroidPasskeys";
+
+export * from "./src/ClerkExpoPasskeys.types";
 
 // Get the native constant value.
 export const PI = ClerkExpoPasskeysModule.PI;
@@ -40,7 +44,7 @@ export function addChangeListener(
 
 export async function create(
   credentials: PublicKeyCredentialCreationOptionsJSON
-) {
+): Promise<RegistrationResponseJSON | null> {
   if (Platform.OS === "android") {
     return AndroidPasskeys.create(credentials);
   } else if (Platform.OS === "ios") {
@@ -50,7 +54,9 @@ export async function create(
   }
 }
 
-export async function get(credentials: PublicKeyCredentialRequestOptionsJSON) {
+export async function get(
+  credentials: PublicKeyCredentialRequestOptionsJSON
+): Promise<AuthenticationResponseJSON | null> {
   if (Platform.OS === "android") {
     return AndroidPasskeys.get(credentials);
   } else if (Platform.OS === "ios") {
