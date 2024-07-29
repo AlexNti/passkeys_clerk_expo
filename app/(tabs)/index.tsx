@@ -23,7 +23,10 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <Pressable onPress={() => signUp("alex")}>
-          <Text>Create</Text>
+          <Text>Sign-up</Text>
+        </Pressable>
+        <Pressable onPress={() => signIn()}>
+          <Text>Sign-in</Text>
         </Pressable>
         <ThemedText>
           Edit{" "}

@@ -48,6 +48,28 @@ class ClerkExpoPasskeysModule : Module() {
           false
       }
 
+        AsyncFunction("get") { request: String, promise: Promise ->
+            val credentialManager =
+                CredentialManager.create(appContext.reactContext?.applicationContext!!)
+            val getCredentialRequest =
+                GetCredentialRequest(listOf(GetPublicKeyCredentialOption(request)))
+    
+            mainScope.launch {
+                try {
+                    val result = appContext.activityProvider?.currentActivity?.let {
+                        credentialManager.getCredential(it, getCredentialRequest)
+                    }
+                    val response =
+                     result?.credential?.data?.getString("androidx.credentials.BUNDLE_KEY_AUTHENTICATION_RESPONSE_JSON")
+                    val authenticationResponse =
+                        Gson().fromJson(response, AuthenticationResponseJSON::class.java)
+                    promise.resolve(authenticationResponse)
+                } catch (e: GetCredentialException) {
+                    promise.reject("Passkey Get", e.message, e)
+                }
+            }
+        }
+
       
 
       AsyncFunction("create") { request: String, promise: Promise ->

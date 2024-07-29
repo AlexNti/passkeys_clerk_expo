@@ -12,6 +12,7 @@ import {
   ChangeEventPayload,
   ClerkExpoPasskeysViewProps,
   PublicKeyCredentialCreationOptionsJSON,
+  PublicKeyCredentialRequestOptionsJSON,
 } from "./src/ClerkExpoPasskeys.types";
 import { Platform } from "react-native";
 import { AndroidPasskeys } from "./src/AndroidPasskeys";
@@ -42,6 +43,16 @@ export async function create(
 ) {
   if (Platform.OS === "android") {
     return AndroidPasskeys.create(credentials);
+  } else if (Platform.OS === "ios") {
+    throw new Error("Not supoorted");
+  } else {
+    throw new Error("Not supoorted");
+  }
+}
+
+export async function get(credentials: PublicKeyCredentialRequestOptionsJSON) {
+  if (Platform.OS === "android") {
+    return AndroidPasskeys.get(credentials);
   } else if (Platform.OS === "ios") {
     throw new Error("Not supoorted");
   } else {
