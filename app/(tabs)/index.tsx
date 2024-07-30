@@ -12,20 +12,26 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { signIn, signUp, User } from "@/passkeys/utils/auth";
+import { signIn, createPasskey, User } from "@/passkeys/utils/auth";
 import React from "react";
 
-export default function HomeScreen() {
-  const [loggedInUser, setLoggedInUser] = React.useState<User>();
-  const [userName, setUsername] = React.useState("");
+import { useUser } from "@clerk/clerk-expo";
 
-  const handleSignUp = async () => {
-    if (!userName) {
-      return;
-    }
+export default function HomeScreen() {
+  const { user, isLoaded } = useUser();
+  const [loggedInUser, setLoggedInUser] = React.useState<User>(null);
+
+  if (!isLoaded || !user) {
+    return null;
+  }
+
+  const _createPasskey = async () => {
     try {
-      const user = await signUp(userName);
-      setLoggedInUser(user);
+      const _user = await createPasskey(
+        user.primaryEmailAddress?.emailAddress || "",
+        user.id
+      );
+      if (_user) setLoggedInUser(_user);
     } catch (e) {
       console.log(e);
     }
@@ -34,8 +40,7 @@ export default function HomeScreen() {
   const handleSignIn = async () => {
     try {
       const user = await signIn();
-      console.log({ user });
-      setLoggedInUser(user);
+      if (user) setLoggedInUser(user);
     } catch (e) {
       console.log(e);
     }
@@ -52,19 +57,13 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <Pressable style={{ borderBlockColor: "1" }} onPress={handleSignUp}>
-          <Text style={{ color: "cyan" }}>Sign-up</Text>
+        <Pressable style={{ borderBlockColor: "1" }} onPress={_createPasskey}>
+          <Text style={{ color: "cyan" }}>Create passkey</Text>
         </Pressable>
 
         <Pressable onPress={handleSignIn}>
           <Text style={{ color: "cyan" }}>Sign-in</Text>
         </Pressable>
-
-        <TextInput
-          onChangeText={setUsername}
-          style={{ color: "cyan" }}
-          placeholder="Please Enter Username of the user"
-        />
 
         {loggedInUser && (
           <ThemedView style={{ flex: 1, flexDirection: "column" }}>

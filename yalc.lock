@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@clerk/clerk-expo": {
+      "signature": "ef353fa6d9487183293a59129e72b9fa",
+      "file": true
+    }
+  }
+}

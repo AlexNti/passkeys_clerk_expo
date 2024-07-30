@@ -10,8 +10,9 @@ export type User = {
   username: string;
 };
 
-export async function signUp(
-  _username: string
+export async function createPasskey(
+  _username: string,
+  _userId: string
 ): Promise<{ username: string; userId: string } | undefined> {
   const username = _username;
   // should be handled in server - start
@@ -27,7 +28,7 @@ export async function signUp(
 
       rp: { name: "Passkey Demo", id: "menu.ble-papagalos.gr" },
       user: {
-        id: username + generateId(5),
+        id: _userId,
         name: username,
         displayName: username,
       },
@@ -53,17 +54,17 @@ export async function signUp(
     }
 
     // should be handled in server from here
-    const userId = generateId(8);
+
     const publicKey = publicKeyCredential?.response.publicKey;
 
     db.insert({
-      id: userId,
+      id: _userId,
       credential_id: publicKeyCredential.id, // base64url encoded
       username,
       public_key: publicKey,
     });
 
-    return { userId, username };
+    return { userId: _userId, username };
   } catch (e) {
     console.log(e);
   }
