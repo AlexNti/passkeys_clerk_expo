@@ -27,11 +27,13 @@ export default function HomeScreen() {
 
   const _createPasskey = async () => {
     try {
-      const _user = await createPasskey(
-        user.primaryEmailAddress?.emailAddress || "",
-        user.id
-      );
-      if (_user) setLoggedInUser(_user);
+      const clerk_passkey = await user.__experimentalCreatePassKey();
+      console.log(clerk_passkey.verification?.publicKey);
+      // const _user = await createPasskey(
+      //   user.primaryEmailAddress?.emailAddress || "",
+      //   user.id
+      // );
+      // if (_user) setLoggedInUser(_user);
     } catch (e) {
       console.log(e);
     }

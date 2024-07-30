@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@clerk/clerk-expo": "file:.yalc/@clerk/clerk-expo",
+    "@clerk/clerk-js": "file:.yalc/@clerk/clerk-js",
+    "@clerk/types": "file:.yalc/@clerk/types",
     "@expo/vector-icons": "^14.0.2",
     "@hexagon/base64": "^1.1.28",
     "@react-native-async-storage/async-storage": "1.23.1",

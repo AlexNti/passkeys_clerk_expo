@@ -2,7 +2,15 @@
   "version": "v1",
   "packages": {
     "@clerk/clerk-expo": {
-      "signature": "ef353fa6d9487183293a59129e72b9fa",
+      "signature": "230c2635fdc2968b0f6bddee6aafc94a",
+      "file": true
+    },
+    "@clerk/clerk-js": {
+      "signature": "66cddef66f5664d01e8f18f54b651ee1",
+      "file": true
+    },
+    "@clerk/types": {
+      "signature": "6a1cb902480d5725826c513301afd6b5",
       "file": true
     }
   }

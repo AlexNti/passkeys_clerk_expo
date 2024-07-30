@@ -1,0 +1,81 @@
+{
+  "name": "@clerk/clerk-js",
+  "version": "5.10.2+66cddef6",
+  "description": "Clerk JS library",
+  "keywords": [
+    "clerk",
+    "auth",
+    "authentication",
+    "passwordless",
+    "session",
+    "jwt"
+  ],
+  "homepage": "https://clerk.com/",
+  "bugs": {
+    "url": "https://github.com/clerk/javascript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clerk/javascript.git",
+    "directory": "packages/clerk-js"
+  },
+  "license": "MIT",
+  "author": "Clerk",
+  "main": "dist/clerk.js",
+  "jsdelivr": "dist/clerk.browser.js",
+  "module": "dist/clerk.mjs",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "headless"
+  ],
+  "scripts": {
+    "build": "npm run build:bundle && npm run build:declarations",
+    "build:analyze": "webpack-bundle-analyzer stats.json dist/",
+    "build:bundle": "npm run clean && webpack --config webpack.config.js --env production",
+    "build:declarations": "tsc -p tsconfig.declarations.json",
+    "build:stats": "webpack --config webpack.config.js --env production --json=stats.json --env variant=\"clerk.browser\"",
+    "bundlewatch": "npx bundlewatch --config bundlewatch.config.json",
+    "clean": "rimraf ./dist",
+    "dev": "webpack serve --config webpack.config.js",
+    "dev:headless": "webpack serve --config webpack.config.js --env variant=\"clerk.headless.browser\"",
+    "lint": "eslint src/",
+    "lint:attw": "attw --pack .",
+    "lint:publint": "publint || true",
+    "test": "jest",
+    "test:cache:clear": "jest --clearCache --useStderr",
+    "test:ci": "jest --maxWorkers=70%",
+    "test:coverage": "jest --collectCoverage && open coverage/lcov-report/index.html",
+    "watch": "webpack --config webpack.config.js --env production --watch"
+  },
+  "browserslist": "last 2 versions, ios_saf > 12, Safari > 12, > 1%, not dead, not ie > 0",
+  "dependencies": {
+    "@clerk/localizations": "2.5.2",
+    "@clerk/shared": "2.4.1",
+    "@clerk/types": "4.9.1",
+    "@emotion/cache": "11.11.0",
+    "@emotion/react": "11.11.1",
+    "@floating-ui/react": "0.25.4",
+    "@formkit/auto-animate": "^0.8.1",
+    "@zxcvbn-ts/core": "3.0.4",
+    "@zxcvbn-ts/language-common": "3.0.4",
+    "browser-tabs-lock": "1.2.15",
+    "copy-to-clipboard": "3.3.3",
+    "core-js": "3.26.1",
+    "crypto-js": "^4.2.0",
+    "dequal": "2.0.3",
+    "qrcode.react": "3.1.0",
+    "regenerator-runtime": "0.13.11"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "yalcSig": "66cddef66f5664d01e8f18f54b651ee1"
+}
