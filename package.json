@@ -22,6 +22,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@bacons/text-decoder": "^0.0.0",
     "@clerk/clerk-expo": "file:.yalc/@clerk/clerk-expo",
     "@clerk/clerk-js": "file:.yalc/@clerk/clerk-js",
     "@clerk/types": "file:.yalc/@clerk/types",

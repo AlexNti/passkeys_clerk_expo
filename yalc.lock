@@ -6,7 +6,7 @@
       "file": true
     },
     "@clerk/clerk-js": {
-      "signature": "66cddef66f5664d01e8f18f54b651ee1",
+      "signature": "09e479312faaefad42a4bded4993bac3",
       "file": true
     },
     "@clerk/types": {

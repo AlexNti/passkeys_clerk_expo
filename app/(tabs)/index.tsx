@@ -1,3 +1,5 @@
+import "@bacons/text-decoder/install";
+
 import {
   Image,
   StyleSheet,
@@ -16,24 +18,57 @@ import { signIn, createPasskey, User } from "@/passkeys/utils/auth";
 import React from "react";
 
 import { useUser } from "@clerk/clerk-expo";
+`amused-bream-24.clerk.accountsstage.dev/wellknows/assets.json`;
+import {
+  create,
+  PublicKeyCredentialCreationOptionsJSON,
+} from "@/modules/clerk-expo-passkeys";
+
+import { Buffer } from "buffer";
+import { encodeBase64Url } from "@/passkeys/utils/encode";
 
 export default function HomeScreen() {
-  const { user, isLoaded } = useUser();
-  const [loggedInUser, setLoggedInUser] = React.useState<User>(null);
+  const { user: clerkUser, isLoaded } = useUser();
+  const [loggedInUser, setLoggedInUser] = React.useState<User>();
 
-  if (!isLoaded || !user) {
+  if (!isLoaded || !clerkUser) {
     return null;
   }
 
   const _createPasskey = async () => {
     try {
-      const clerk_passkey = await user.__experimentalCreatePassKey();
-      console.log(clerk_passkey.verification?.publicKey);
-      // const _user = await createPasskey(
-      //   user.primaryEmailAddress?.emailAddress || "",
-      //   user.id
-      // );
-      // if (_user) setLoggedInUser(_user);
+      const response = await clerkUser.__experimentalCreatePassKey();
+      const publicKey = response.verification?.publicKey;
+
+      if (!publicKey) {
+        throw new Error("No public key found");
+      }
+      const rp = { id: publicKey.rp.id, name: publicKey.rp.name };
+
+      const userId = encodeBase64Url(publicKey.user.id);
+      const user = {
+        id: userId,
+        displayName: publicKey.user.displayName,
+        name: publicKey.user.name,
+      };
+
+      const pubKeyCredParams = publicKey.pubKeyCredParams;
+      const challenge = encodeBase64Url(publicKey.challenge);
+
+      console.log({ challenge, userId });
+
+      const _createPasskey = await create({
+        rp,
+        user,
+        pubKeyCredParams,
+        challenge,
+        authenticatorSelection: {
+          authenticatorAttachment: "platform",
+          requireResidentKey: true,
+          residentKey: "required",
+          userVerification: "required",
+        },
+      });
     } catch (e) {
       console.log(e);
     }
