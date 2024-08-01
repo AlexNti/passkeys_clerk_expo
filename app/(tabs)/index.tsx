@@ -17,7 +17,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { signIn, createPasskey, User } from "@/passkeys/utils/auth";
 import React from "react";
 
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth, useClerk, useSignIn, useUser } from "@clerk/clerk-expo";
 `amused-bream-24.clerk.accountsstage.dev/wellknows/assets.json`;
 import {
   create,
@@ -25,11 +25,19 @@ import {
 } from "@/modules/clerk-expo-passkeys";
 
 import { Buffer } from "buffer";
-import { encodeBase64Url } from "@/passkeys/utils/encode";
+import { encodeBase64Url, toArrayBuffer } from "@/passkeys/utils/encode";
+import {
+  ExperimentalPublicKeyCredentialWithAuthenticatorAttestationResponse,
+  PublicKeyCredentialWithAuthenticatorAttestationResponse,
+} from "@clerk/types";
 
 export default function HomeScreen() {
   const { user: clerkUser, isLoaded } = useUser();
   const [loggedInUser, setLoggedInUser] = React.useState<User>();
+  const auth = useAuth();
+  const clerk = useClerk();
+
+  const { signIn } = useSignIn();
 
   if (!isLoaded || !clerkUser) {
     return null;
@@ -37,15 +45,15 @@ export default function HomeScreen() {
 
   const _createPasskey = async () => {
     try {
-      const response = await clerkUser.__experimentalCreatePassKey();
-      const publicKey = response.verification?.publicKey;
+      const passkey = await clerkUser.__experimentalCreatePassKey();
+      const publicKey = passkey.verification?.publicKey;
 
       if (!publicKey) {
         throw new Error("No public key found");
       }
       const rp = { id: publicKey.rp.id, name: publicKey.rp.name };
 
-      const userId = encodeBase64Url(publicKey.user.id);
+      const userId = encodeBase64Url(toArrayBuffer(publicKey.user.id));
       const user = {
         id: userId,
         displayName: publicKey.user.displayName,
@@ -53,11 +61,9 @@ export default function HomeScreen() {
       };
 
       const pubKeyCredParams = publicKey.pubKeyCredParams;
-      const challenge = encodeBase64Url(publicKey.challenge);
+      const challenge = encodeBase64Url(toArrayBuffer(publicKey.challenge));
 
-      console.log({ challenge, userId });
-
-      const _createPasskey = await create({
+      const publicCredential = await create({
         rp,
         user,
         pubKeyCredParams,
@@ -69,17 +75,44 @@ export default function HomeScreen() {
           userVerification: "required",
         },
       });
+
+      if (!publicCredential) {
+        throw new Error("No public credential found");
+      }
+
+      const serializedPublicCredential: ExperimentalPublicKeyCredentialWithAuthenticatorAttestationResponse =
+        {
+          id: publicCredential.id,
+          rawId: publicCredential.rawId,
+          response: {
+            attestationObject: publicCredential.response.attestationObject,
+            clientDataJSON: publicCredential.response.clientDataJSON,
+
+            transports: publicCredential?.response?.transports as string[],
+          },
+          type: publicCredential.type,
+          authenticatorAttachment:
+            publicCredential.authenticatorAttachment || null,
+        };
+
+      const res = await clerkUser.__experimentalVerifyPasskey(
+        passkey.id,
+        serializedPublicCredential
+      );
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
   };
 
   const handleSignIn = async () => {
     try {
-      const user = await signIn();
-      if (user) setLoggedInUser(user);
+      const signinResource = await signIn?.prepareFirstFactor({
+        strategy: "passkey",
+      });
+      // const user = await signIn();
+      // if (user) setLoggedInUser(user);
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
   };
 
@@ -98,8 +131,16 @@ export default function HomeScreen() {
           <Text style={{ color: "cyan" }}>Create passkey</Text>
         </Pressable>
 
-        <Pressable onPress={handleSignIn}>
+        {/* <Pressable onPress={handleSignIn}>
           <Text style={{ color: "cyan" }}>Sign-in</Text>
+        </Pressable> */}
+
+        <Pressable
+          onPress={() => {
+            auth.signOut();
+          }}
+        >
+          <Text style={{ color: "cyan" }}>Sign-out</Text>
         </Pressable>
 
         {loggedInUser && (

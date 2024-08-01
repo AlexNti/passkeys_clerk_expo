@@ -1,6 +1,6 @@
 {
   "name": "@clerk/clerk-expo",
-  "version": "2.0.0+230c2635",
+  "version": "2.0.0+aad89fef",
   "description": "Clerk React Native/Expo library",
   "keywords": [
     "react",
@@ -71,5 +71,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "yalcSig": "230c2635fdc2968b0f6bddee6aafc94a"
+  "yalcSig": "aad89fefd6c393350c27b22338b8e5c9"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@clerk/types",
-  "version": "4.9.1+6a1cb902",
+  "version": "4.9.1+4013b171",
   "description": "Typings for Clerk libraries.",
   "keywords": [
     "clerk",
@@ -44,5 +44,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "yalcSig": "6a1cb902480d5725826c513301afd6b5"
+  "yalcSig": "4013b1719b7e7efa551e4bebe61c70cf"
 }
