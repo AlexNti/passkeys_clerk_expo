@@ -33,7 +33,6 @@ import {
 
 export default function HomeScreen() {
   const { user: clerkUser, isLoaded } = useUser();
-  const [loggedInUser, setLoggedInUser] = React.useState<User>();
   const auth = useAuth();
   const clerk = useClerk();
 
@@ -131,10 +130,6 @@ export default function HomeScreen() {
           <Text style={{ color: "cyan" }}>Create passkey</Text>
         </Pressable>
 
-        {/* <Pressable onPress={handleSignIn}>
-          <Text style={{ color: "cyan" }}>Sign-in</Text>
-        </Pressable> */}
-
         <Pressable
           onPress={() => {
             auth.signOut();
@@ -143,13 +138,13 @@ export default function HomeScreen() {
           <Text style={{ color: "cyan" }}>Sign-out</Text>
         </Pressable>
 
-        {loggedInUser && (
+        {clerkUser && (
           <ThemedView style={{ flex: 1, flexDirection: "column" }}>
             <Text style={{ color: "cyan" }}>
-              You are logged in with the user with ID {loggedInUser.userId}
+              You are logged in with the user with ID {clerkUser.id}
             </Text>
             <Text style={{ color: "cyan" }}>
-              Username: {loggedInUser.username}
+              Email: {clerkUser.primaryEmailAddress?.toString()}
             </Text>
           </ThemedView>
         )}
