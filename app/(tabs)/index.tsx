@@ -1,3 +1,5 @@
+import "@bacons/text-decoder/install";
+
 import {
   Image,
   StyleSheet,
@@ -12,32 +14,104 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { signIn, signUp, User } from "@/passkeys/utils/auth";
+import { signIn, createPasskey, User } from "@/passkeys/utils/auth";
 import React from "react";
 
-export default function HomeScreen() {
-  const [loggedInUser, setLoggedInUser] = React.useState<User>();
-  const [userName, setUsername] = React.useState("");
+import { useAuth, useClerk, useSignIn, useUser } from "@clerk/clerk-expo";
+`amused-bream-24.clerk.accountsstage.dev/wellknows/assets.json`;
+import {
+  create,
+  PublicKeyCredentialCreationOptionsJSON,
+} from "@/modules/clerk-expo-passkeys";
 
-  const handleSignUp = async () => {
-    if (!userName) {
-      return;
-    }
+import { Buffer } from "buffer";
+import { encodeBase64Url, toArrayBuffer } from "@/passkeys/utils/encode";
+import {
+  ExperimentalPublicKeyCredentialWithAuthenticatorAttestationResponse,
+  PublicKeyCredentialWithAuthenticatorAttestationResponse,
+} from "@clerk/types";
+
+export default function HomeScreen() {
+  const { user: clerkUser, isLoaded } = useUser();
+  const auth = useAuth();
+  const clerk = useClerk();
+
+  const { signIn } = useSignIn();
+
+  if (!isLoaded || !clerkUser) {
+    return null;
+  }
+
+  const _createPasskey = async () => {
     try {
-      const user = await signUp(userName);
-      setLoggedInUser(user);
+      const passkey = await clerkUser.__experimentalCreatePassKey();
+      const publicKey = passkey.verification?.publicKey;
+
+      if (!publicKey) {
+        throw new Error("No public key found");
+      }
+      const rp = { id: publicKey.rp.id, name: publicKey.rp.name };
+
+      const userId = encodeBase64Url(toArrayBuffer(publicKey.user.id));
+      const user = {
+        id: userId,
+        displayName: publicKey.user.displayName,
+        name: publicKey.user.name,
+      };
+
+      const pubKeyCredParams = publicKey.pubKeyCredParams;
+      const challenge = encodeBase64Url(toArrayBuffer(publicKey.challenge));
+
+      const publicCredential = await create({
+        rp,
+        user,
+        pubKeyCredParams,
+        challenge,
+        authenticatorSelection: {
+          authenticatorAttachment: "platform",
+          requireResidentKey: true,
+          residentKey: "required",
+          userVerification: "required",
+        },
+      });
+
+      if (!publicCredential) {
+        throw new Error("No public credential found");
+      }
+
+      const serializedPublicCredential: ExperimentalPublicKeyCredentialWithAuthenticatorAttestationResponse =
+        {
+          id: publicCredential.id,
+          rawId: publicCredential.rawId,
+          response: {
+            attestationObject: publicCredential.response.attestationObject,
+            clientDataJSON: publicCredential.response.clientDataJSON,
+
+            transports: publicCredential?.response?.transports as string[],
+          },
+          type: publicCredential.type,
+          authenticatorAttachment:
+            publicCredential.authenticatorAttachment || null,
+        };
+
+      const res = await clerkUser.__experimentalVerifyPasskey(
+        passkey.id,
+        serializedPublicCredential
+      );
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
   };
 
   const handleSignIn = async () => {
     try {
-      const user = await signIn();
-      console.log({ user });
-      setLoggedInUser(user);
+      const signinResource = await signIn?.prepareFirstFactor({
+        strategy: "passkey",
+      });
+      // const user = await signIn();
+      // if (user) setLoggedInUser(user);
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
   };
 
@@ -52,27 +126,25 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <Pressable style={{ borderBlockColor: "1" }} onPress={handleSignUp}>
-          <Text style={{ color: "cyan" }}>Sign-up</Text>
+        <Pressable style={{ borderBlockColor: "1" }} onPress={_createPasskey}>
+          <Text style={{ color: "cyan" }}>Create passkey</Text>
         </Pressable>
 
-        <Pressable onPress={handleSignIn}>
-          <Text style={{ color: "cyan" }}>Sign-in</Text>
+        <Pressable
+          onPress={() => {
+            auth.signOut();
+          }}
+        >
+          <Text style={{ color: "cyan" }}>Sign-out</Text>
         </Pressable>
 
-        <TextInput
-          onChangeText={setUsername}
-          style={{ color: "cyan" }}
-          placeholder="Please Enter Username of the user"
-        />
-
-        {loggedInUser && (
+        {clerkUser && (
           <ThemedView style={{ flex: 1, flexDirection: "column" }}>
             <Text style={{ color: "cyan" }}>
-              You are logged in with the user with ID {loggedInUser.userId}
+              You are logged in with the user with ID {clerkUser.id}
             </Text>
             <Text style={{ color: "cyan" }}>
-              Username: {loggedInUser.username}
+              Email: {clerkUser.primaryEmailAddress?.toString()}
             </Text>
           </ThemedView>
         )}

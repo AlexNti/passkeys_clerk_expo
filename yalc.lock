@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "packages": {
+    "@clerk/clerk-expo": {
+      "signature": "aad89fefd6c393350c27b22338b8e5c9",
+      "file": true
+    },
+    "@clerk/clerk-js": {
+      "signature": "9f4458d03e02ec3fabf735575a900e09",
+      "file": true
+    },
+    "@clerk/types": {
+      "signature": "4013b1719b7e7efa551e4bebe61c70cf",
+      "file": true
+    }
+  }
+}

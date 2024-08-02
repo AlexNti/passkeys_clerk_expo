@@ -221,6 +221,8 @@ PODS:
     - Yoga
   - ExpoAsset (10.0.10):
     - ExpoModulesCore
+  - ExpoCrypto (13.0.2):
+    - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
   - ExpoFont (12.0.9):
@@ -252,6 +254,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoSecureStore (13.0.2):
+    - ExpoModulesCore
   - ExpoSystemUI (3.0.7):
     - ExpoModulesCore
   - ExpoWebBrowser (13.0.3):
@@ -1530,11 +1534,13 @@ DEPENDENCIES:
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
+  - ExpoCrypto (from `../node_modules/expo-crypto/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -1631,6 +1637,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/expo-asset/ios"
+  ExpoCrypto:
+    :path: "../node_modules/expo-crypto/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
@@ -1641,6 +1649,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoSecureStore:
+    :path: "../node_modules/expo-secure-store/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
   ExpoWebBrowser:
@@ -1781,11 +1791,13 @@ SPEC CHECKSUMS:
   expo-dev-menu: 02f7aa39ee32f4730815cb5fe0c38d7bfda76ab7
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
+  ExpoCrypto: 156078f266bf28f80ecf5e2a9c3a0d6ffce07a1c
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
   ExpoHead: 7880300d9c1519420530cf591d333d3f96ff9f6e
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 734c1802786b23c9598f4d15273753a779969368
+  ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
   EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87

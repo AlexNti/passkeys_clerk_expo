@@ -30,7 +30,7 @@
       </intent-filter>
       <intent-filter android:autoVerify="true" data-generated="true">
         <action android:name="android.intent.action.VIEW"/>
-        <data android:scheme="https" android:host="menu.ble-papagalos.gr"/>
+        <data android:scheme="https" android:host="amused-bream-24.clerk.accountsstage.dev"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
