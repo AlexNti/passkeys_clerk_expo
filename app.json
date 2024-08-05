@@ -14,7 +14,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.clerk-passkeys"
+      "bundleIdentifier": "com.clerk.passkeys",
+      "associatedDomains": ["applinks:amused-bream-24.clerk.accountsstage.dev"]
+    
     },
     "android": {
       "adaptiveIcon": {

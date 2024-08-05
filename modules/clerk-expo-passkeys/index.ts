@@ -1,3 +1,4 @@
+import { get } from "@/modules/clerk-expo-passkeys";
 import {
   NativeModulesProxy,
   EventEmitter,
@@ -18,6 +19,7 @@ import {
 } from "./src/ClerkExpoPasskeys.types";
 import { Platform } from "react-native";
 import { AndroidPasskeys } from "./src/AndroidPasskeys";
+import { IosPasskeys } from "./src/IOSPasskeys";
 
 export * from "./src/ClerkExpoPasskeys.types";
 
@@ -48,7 +50,7 @@ export async function create(
   if (Platform.OS === "android") {
     return AndroidPasskeys.create(credentials);
   } else if (Platform.OS === "ios") {
-    throw new Error("Not supoorted");
+    return IosPasskeys.create(credentials);
   } else {
     throw new Error("Not supoorted");
   }
@@ -60,7 +62,7 @@ export async function get(
   if (Platform.OS === "android") {
     return AndroidPasskeys.get(credentials);
   } else if (Platform.OS === "ios") {
-    throw new Error("Not supoorted");
+    return IosPasskeys.get(credentials);
   } else {
     throw new Error("Not supoorted");
   }
