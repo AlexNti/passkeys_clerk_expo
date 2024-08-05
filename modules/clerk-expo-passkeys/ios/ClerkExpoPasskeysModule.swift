@@ -95,7 +95,7 @@ public class ClerkExpoPasskeysModule: Module {
                     if let authenticationResult = result?.authenticationResult {
                         let authResult: NSDictionary = [
                             "credentialID": authenticationResult.credentialID.toBase64Url(),
-                            "userID": String(decoding: authenticationResult.userID, as: UTF8.self),
+                            "userID": authenticationResult.userID.toBase64Url(),
                             "response": [
                                 "rawAuthenticatorData": authenticationResult.rawAuthenticatorData.toBase64Url(),
                                 "rawClientDataJSON": authenticationResult.rawClientDataJSON.toBase64Url(),

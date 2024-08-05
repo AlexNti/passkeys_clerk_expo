@@ -15,7 +15,7 @@ export class IosPasskeys {
         credentials.user.id,
         credentials.user.displayName
       );
-      return response;
+      return IosPasskeys.parseCreateResult(response);
     } catch (error) {
       console.log(error);
       throw error;
@@ -41,7 +41,7 @@ export class IosPasskeys {
         credentials.rpId,
         credentials.allowCredentials?.map(({ id }) => id) ?? []
       );
-      return response;
+      return IosPasskeys.parseAuthenticationResult(response);
     } catch (error) {
       console.log(error);
       throw error;

@@ -93,7 +93,7 @@ export default function Signin() {
     }
   };
   return (
-    <View style={{ marginTop: 20, marginLeft: 10 }}>
+    <View style={{ marginTop: 100, marginLeft: 10 }}>
       <View>
         <TextInput
           autoCapitalize="none"
