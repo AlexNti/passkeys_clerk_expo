@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.clerk-passkeys</string>
+          <string>com.clerk.passkeys</string>
         </array>
       </dict>
       <dict>
