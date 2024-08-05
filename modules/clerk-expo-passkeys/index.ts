@@ -1,4 +1,3 @@
-import { get } from "@/modules/clerk-expo-passkeys";
 import {
   NativeModulesProxy,
   EventEmitter,

@@ -1,4 +1,5 @@
 import ExpoModulesCore
+import AuthenticationServices
 
 public class ClerkExpoPasskeysModule: Module {
   // Each module class must implement the definition function. The definition consists of components
@@ -145,16 +146,16 @@ public class ClerkExpoPasskeysModule: Module {
         
 
     // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    // Events("onChange")
 
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
+    // AsyncFunction("setValueAsync") { (value: String) in
+    //   // Send an event to JavaScript.
+    //   self.sendEvent("onChange", [
+    //     "value": value
+    //   ])
+    // }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
     // view definition: Prop, Events.
