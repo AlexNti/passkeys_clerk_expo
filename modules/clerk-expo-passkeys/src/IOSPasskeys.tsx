@@ -1,6 +1,9 @@
 import {
+  AuthenticationResponseJSON,
+  DeserializedAuthenticatorAttestationResponseJSON,
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
+  RegistrationResponseJSON,
 } from "./ClerkExpoPasskeys.types";
 import ClerkExpoPasskeys from "./ClerkExpoPasskeysModule";
 
@@ -22,7 +25,9 @@ export class IosPasskeys {
     }
   }
 
-  private static parseCreateResult(result: any) {
+  private static parseCreateResult(
+    result: DeserializedAuthenticatorAttestationResponseJSON
+  ): RegistrationResponseJSON {
     return {
       id: result.credentialID,
       rawId: result.credentialID,
@@ -48,7 +53,9 @@ export class IosPasskeys {
     }
   }
 
-  private static parseAuthenticationResult(result: any) {
+  private static parseAuthenticationResult(
+    result: any
+  ): AuthenticationResponseJSON {
     return {
       id: result.credentialID,
       rawId: result.credentialID,

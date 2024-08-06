@@ -56,6 +56,7 @@ export type {
  *
  * - Specification reference: https://w3c.github.io/webauthn/#dictdef-publickeycredentialcreationoptionsjson
  */
+
 export interface PublicKeyCredentialCreationOptionsJSON {
   rp: PublicKeyCredentialRpEntity;
   user: PublicKeyCredentialUserEntityJSON;
@@ -91,8 +92,18 @@ export interface RegistrationResponseJSON {
   rawId: Base64URLString;
   response: AuthenticatorAttestationResponseJSON;
   authenticatorAttachment?: AuthenticatorAttachment;
-  clientExtensionResults: AuthenticationExtensionsClientOutputsJSON;
+  clientExtensionResults?: AuthenticationExtensionsClientOutputsJSON;
   type: PublicKeyCredentialType;
+}
+
+export interface DeserializedAuthenticatorAttestationResponseJSON {
+  credentialID: string;
+  rawId: string;
+  type: "public-key";
+  response: {
+    rawClientDataJSON: AuthenticatorAttestationResponseJSON["clientDataJSON"];
+    rawAttestationObject: AuthenticatorAttestationResponseJSON["attestationObject"];
+  };
 }
 
 /**
@@ -106,7 +117,7 @@ export interface AuthenticationResponseJSON {
   rawId: Base64URLString;
   response: AuthenticatorAssertionResponseJSON;
   authenticatorAttachment?: AuthenticatorAttachment;
-  clientExtensionResults: AuthenticationExtensionsClientOutputsJSON;
+  clientExtensionResults?: AuthenticationExtensionsClientOutputsJSON;
   type: PublicKeyCredentialType;
 }
 
