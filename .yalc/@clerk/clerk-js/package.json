@@ -1,6 +1,6 @@
 {
   "name": "@clerk/clerk-js",
-  "version": "5.10.2+9f4458d0",
+  "version": "5.10.2+ee7837e3",
   "description": "Clerk JS library",
   "keywords": [
     "clerk",
@@ -77,5 +77,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "yalcSig": "9f4458d03e02ec3fabf735575a900e09"
+  "yalcSig": "ee7837e34aa39d72212d1b0b105d5c7e"
 }
